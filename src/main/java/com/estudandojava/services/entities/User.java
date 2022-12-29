@@ -1,8 +1,11 @@
 package com.estudandojava.services.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,8 +18,14 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private String password;
+    @JsonIgnore
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders=new ArrayList<>();
+
+
 
     public User(){
+
 
     }
 
@@ -26,6 +35,7 @@ public class User implements Serializable {
         this.email = email;
         this.phone = phone;
         this.password = password;
+
     }
 
     public Long getId() {
@@ -68,12 +78,24 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        User other = (User) obj;
+        if (id == null) {
+            return other.id == null;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
     }
 
     @Override
