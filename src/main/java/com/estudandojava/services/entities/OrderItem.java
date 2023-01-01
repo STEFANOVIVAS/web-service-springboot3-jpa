@@ -16,16 +16,20 @@ public class OrderItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Integer quantity;
+    private Double price;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="order_id")
     private Order order;
+
 
     @ManyToOne
     @JoinColumn(name="product_id")
     private Product product;
 
-    private Integer quantity;
-    private Double price;
+
 
     public OrderItem(){
 

@@ -19,12 +19,16 @@ public class Product implements Serializable {
     private Double price;
     private String imgUrl;
 
-    @JsonIgnore
+
     @ManyToMany
     @JoinTable(name="tb_product_category",joinColumns = @JoinColumn(name="product_id"),
             inverseJoinColumns = @JoinColumn(name="category_id"))
 
     private Set<Category> categories=new HashSet<>();
+
+
+    @OneToMany(mappedBy = "product")
+    private Set<OrderItem> items =new HashSet<>();
 
     public Product(){
 
@@ -49,6 +53,16 @@ public class Product implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @JsonIgnore
+    public Set<Order> getOrders(){
+        Set<Order> orders=new HashSet<>();
+        for (OrderItem orderItem : items){
+            orders.add(orderItem.getOrder());
+        }
+        return orders;
+
     }
 
     public Long getId() {
