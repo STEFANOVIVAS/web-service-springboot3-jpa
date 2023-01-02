@@ -29,8 +29,6 @@ public class OrderItem implements Serializable {
     @JoinColumn(name="product_id")
     private Product product;
 
-
-
     public OrderItem(){
 
     }
@@ -85,6 +83,10 @@ public class OrderItem implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Double getSubTotal(){
+        return quantity*price;
     }
 
     @Override

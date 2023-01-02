@@ -1,5 +1,6 @@
 package com.estudandojava.services.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -11,7 +12,10 @@ public class Payment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Instant moment;
+
+    @JsonIgnore
     @OneToOne
     @MapsId
     private Order order;
