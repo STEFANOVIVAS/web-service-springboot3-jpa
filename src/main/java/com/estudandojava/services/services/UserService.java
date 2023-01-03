@@ -5,6 +5,7 @@ package com.estudandojava.services.services;
 import com.estudandojava.services.entities.User;
 import com.estudandojava.services.repositories.UserRepository;
 import com.estudandojava.services.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +36,14 @@ public class UserService {
     }
 
     public User updateUser(Long id, User user){
-        User entity=userRepository.getReferenceById(id);
-        updateUserData(entity,user);
-        return userRepository.save(entity);
+        try{
+            User entity=userRepository.getReferenceById(id);
+            updateUserData(entity,user);
+            return userRepository.save(entity);
+        }catch (EntityNotFoundException e){
+            throw new ResourceNotFoundException(id);
+        }
+
 
     }
 
