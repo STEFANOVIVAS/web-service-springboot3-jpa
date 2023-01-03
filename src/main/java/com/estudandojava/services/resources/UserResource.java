@@ -2,7 +2,11 @@ package com.estudandojava.services.resources;
 
 import com.estudandojava.services.entities.User;
 import com.estudandojava.services.services.UserService;
+import com.estudandojava.services.services.exceptions.DataBaseException;
+import com.estudandojava.services.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -39,7 +43,13 @@ public class UserResource {
 
     @DeleteMapping(value="/{id}")
     public ResponseEntity<Void> deletUser(@PathVariable Long id){
-        userService.deleteUser(id);
+        try {
+            userService.deleteUser(id);
+        }catch(EmptyResultDataAccessException e){
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException e){
+            throw new DataBaseException(e.getMessage());
+        }
         return ResponseEntity.noContent().build();
     }
 
